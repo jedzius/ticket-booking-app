@@ -18,12 +18,20 @@ public class SeatService {
         this.seatRepository = seatRepository;
     }
 
-    public List<SeatDTO> getUnavailableSeats(Integer roomId) {
+    public List<SeatDTO> getSeatsDTO(Integer roomId) {
         final List<Seat> seatList = seatRepository.findAll();
 
         return seatList.stream()
-                .filter(seat -> Objects.equals(seat.getId(), roomId))
+                .filter(seat -> seat.getScreeningRoom().getId().equals(roomId))
                 .map(seat -> new SeatDTO(seat.getSeatCode()))
+                .collect(Collectors.toList());
+    }
+
+    public List<Seat> getSeats(Integer roomId) {
+        final List<Seat> seatList = seatRepository.findAll();
+
+        return seatList.stream()
+                .filter(seat -> seat.getScreeningRoom().getId().equals(roomId))
                 .collect(Collectors.toList());
     }
 }
